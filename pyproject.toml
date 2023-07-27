@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "lambda-requests-s3"
+version = "0.1.0"
+description = ""
+authors = ["Roberto Madinya <roberto.madinya@ioet.com>"]
+readme = "README.md"
+packages = [{include = "lambda_requests_s3"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+boto3 = "^1.28.12"
+boto3-stubs = "^1.28.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
