@@ -2,7 +2,7 @@ terraform {
 
   backend "s3" {
     bucket  = "dev-rmc-tfstate"
-    key     = "terraform/state/lambda-requests-s3.tfstate"
+    key     = "terraform/state/stg-lambda-requests-s3.tfstate"
     region  = "us-east-1"
     encrypt = true
   }
