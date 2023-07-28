@@ -20,7 +20,7 @@ provider "aws" {
 }
 data "aws_caller_identity" "current" {}
 
-module "s3" {
+module "lambda_code_bucket" {
   source      = "../common/s3"
-  bucket_name = "${local.stage}-lambda-requests-s3"
+  bucket_name = "lambda-requests-s3-${local.stage}"
 }

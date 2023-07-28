@@ -1,3 +1,3 @@
-output "bucket_name" {
-  value = module.s3.s3_bucket_name
+output "lambda_bucket_name" {
+  value = module.lambda_code_bucket.bucket_name
 }
