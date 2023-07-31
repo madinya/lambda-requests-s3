@@ -1,4 +1,4 @@
-PACKAGE_NAME = lambda_requests_to_s3.zip
+PACKAGE_NAME = lambda-requests-s3.zip
 VENV_DIR = venv
 SRC_DIR = src
 S3_BUCKET = dev-de-s3-lambda
@@ -37,3 +37,6 @@ clean:
 	@rm -f $(PACKAGE_NAME)
 	@rm -rf $(VENV_DIR)/requirements/
 	@echo "Cleanup complete."
+
+ziptemplate:
+	@cd infrastructure/aws/lambda_template/ && zip -r $(PACKAGE_NAME) ./*

@@ -11,3 +11,4 @@ def upload_file(file_content, file_name:str, extension: str,  bucket_folder:str,
         
     s3 = boto3.client('s3')
     s3.put_object(Bucket=bucket_name, Key=f'{bucket_folder}/{file_name}.{extension}', Body=file_content)
+    
