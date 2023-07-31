@@ -39,10 +39,6 @@ variable "runtime" {
   default = "python3.9"
 }
 
-variable "policy_name" {
-  type = string
-}
-
-variable "role_name" {
+variable "role_arn" {
   type = string
 }
