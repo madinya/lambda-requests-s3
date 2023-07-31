@@ -1,5 +1,5 @@
 
 locals {
-  repo   = "lambda-requests-s3"
-  stage  = "stg"
+  repo  = "lambda-requests-s3"
+  stage = "stg"
 }

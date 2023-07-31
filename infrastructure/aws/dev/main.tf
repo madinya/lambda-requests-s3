@@ -30,10 +30,10 @@ resource "aws_s3_object" "lambda_template_zip" {
 
 module "role_lambda" {
   source      = "../common/iam"
-  role_name   = "${local.repo}_lambda_role_${local.stage}"
-  policy_name = "${local.repo}_lambda_policy_${local.stage}"
+  role_name   = "${local.repo}-lambda-role-${local.stage}"
+  policy_name = "${local.repo}-lambda-policy-${local.stage}"
   statements = [
-    
+
     {
       Effect = "Allow"
       Action = [
@@ -43,7 +43,7 @@ module "role_lambda" {
       Resource = ["*"]
     },
     {
-      Effect  = "Allow"
+      Effect = "Allow"
       Action = ["s3:*"]
       Resource = [
         "${module.lambda_code_bucket.bucket_arn}",
@@ -66,7 +66,7 @@ module "lambda_function" {
   source        = "../common/lambda"
   s3_bucket     = module.lambda_code_bucket.bucket_name
   s3_key        = "${local.repo}.zip"
-  function_name = "${local.repo}_fn_${local.stage}"
+  function_name = "${local.repo}-fn-${local.stage}"
   role_arn      = module.role_lambda.role_arn
 
   env_variables = [{

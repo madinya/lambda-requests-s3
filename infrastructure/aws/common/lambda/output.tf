@@ -1,3 +1,3 @@
-output "lambda_function" {
-  value = resource.aws_lambda_function.my_lambda
+output "invoke_arn" {
+  value = resource.aws_lambda_function.my_lambda.invoke_arn
 }
