@@ -1,7 +1,5 @@
-variable "s3_bucket" {
-  type = string
-}
-variable "s3_key" {
+
+variable "filename" {
   type        = string
   description = "Name of the zip file"
 }

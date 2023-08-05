@@ -13,19 +13,14 @@ terraform {
   }
 }
 provider "aws" {
-  region = "us-east-1"
+  region = local.region
 }
+
 data "aws_caller_identity" "current" {}
 
-module "lambda_code_bucket" {
+module "my_bucket" {
   source      = "../common/s3"
   bucket_name = "${local.repo}-${local.stage}"
-}
-
-resource "aws_s3_object" "lambda_template_zip" {
-  bucket = module.lambda_code_bucket.bucket_name
-  key    = "${local.repo}.zip"
-  source = "../lambda_template/${local.repo}.zip"
 }
 
 module "role_lambda" {
@@ -61,11 +56,9 @@ module "role_lambda" {
   ]
 }
 
-
 module "lambda_function" {
   source        = "../common/lambda"
-  s3_bucket     = module.lambda_code_bucket.bucket_name
-  s3_key        = "${local.repo}.zip"
+  filename      = "../../../${local.repo}-${var.tag}.zip"
   function_name = "${local.repo}-fn-${local.stage}"
   role_arn      = module.role_lambda.role_arn
 
@@ -73,5 +66,4 @@ module "lambda_function" {
     "ENV" = local.stage
     }
   ]
-  depends_on = [aws_s3_object.lambda_template_zip]
 }
