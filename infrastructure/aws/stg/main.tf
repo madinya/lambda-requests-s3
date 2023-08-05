@@ -43,8 +43,8 @@ module "role_lambda" {
       Effect = "Allow"
       Action = ["s3:*"]
       Resource = [
-        "${module.lambda_code_bucket.bucket_arn}",
-        "${module.lambda_code_bucket.bucket_arn}/*"
+        "${module.my_bucket.bucket_arn}",
+        "${module.my_bucket.bucket_arn}/*"
       ]
     },
     {
@@ -65,7 +65,8 @@ module "lambda_function" {
   role_arn      = module.role_lambda.role_arn
 
   env_variables = [{
-    "ENV" = local.stage
+    "ENV"    = local.stage
+    "BUCKET" = module.my_bucket.bucket_name
     }
   ]
 }
