@@ -5,3 +5,4 @@ venv/*
 */.terraform/**
 *.tfstate
 *.tfstate.*
+*.env
