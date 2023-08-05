@@ -1,22 +1,20 @@
-PACKAGE_NAME = lambda-requests-s3.zip
+REPO = lambda-requests-s3
+STAGE = dev
 VENV_DIR = venv
-SRC_DIR = src
-S3_BUCKET = dev-de-s3-lambda
 LIB_REQUIREMENTS = $(VENV_DIR)/requirements/
+GIT_HASH := $(shell git rev-parse --short HEAD)
+PACKAGE_NAME = ${REPO}-${GIT_HASH}.zip
+AUTO_APPROVE=$(if $(filter $(TF_ACTION),apply),--auto-approve,)
+COLOR_FLAG=$(if $(filter $(COLOR),0),-no-color,)
 
 .PHONY: package clean upload install venv
 
 package: install
 	@echo "Creating package..."
-	@cd $(SRC_DIR) && zip -r ../$(PACKAGE_NAME) ./*
+	@cd src && zip -r ../$(PACKAGE_NAME) ./*
 	@cd $(LIB_REQUIREMENTS) && zip -ur ../../$(PACKAGE_NAME) ./*
 	@echo "Package created: $(PACKAGE_NAME)"
 	@rm -rf $(VENV_DIR)/requirements/	
-
-upload:
-	@echo "Uploading package to S3..."
-	@aws s3 cp $(PACKAGE_NAME) s3://$(S3_BUCKET)/$(PACKAGE_NAME)
-	@echo "Package uploaded to S3: $(S3_BUCKET)/$(PACKAGE_NAME)"
 
 install: venv
 	@echo "Installing dependencies..."
@@ -38,5 +36,6 @@ clean:
 	@rm -rf $(VENV_DIR)/requirements/
 	@echo "Cleanup complete."
 
-ziptemplate:
-	@cd infrastructure/aws/lambda_template/ && zip -r $(PACKAGE_NAME) ./*
+tf_update_lambda: 
+	cd ./infrastructure/aws/${STAGE}; \
+	terraform $(TF_ACTION) $(COLOR_FLAG) -var 'tag=$(GIT_HASH)' $(AUTO_APPROVE)

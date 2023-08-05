@@ -1,6 +1,5 @@
 resource "aws_lambda_function" "my_lambda" {
-  s3_bucket     = var.s3_bucket
-  s3_key        = var.s3_key
+  filename      = var.filename
   function_name = var.function_name
   role          = var.role_arn
   timeout       = var.timeout
