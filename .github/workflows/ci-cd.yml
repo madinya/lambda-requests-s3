@@ -1,0 +1,95 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+env:
+  SERVICE: lambda-requests-s3
+  INFRA_DIR: infrastructure/aws
+  ENV: DEV
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-1
+  TERRAFORM_VERSION: 1.2.9
+  SOPS_VERSION: 3.7.3
+
+jobs:
+  ci-cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Sets env var for prod
+        run: |
+          echo "ENV=prd" >> $GITHUB_ENV
+        if: github.ref == 'refs/heads/main'
+
+      - name: Sets env var for stage or any other branch
+        run: |
+          echo "ENV=dev" >> $GITHUB_ENV
+        if: github.ref != 'refs/heads/main'
+
+      - name: Detect Changes on files
+        id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            api:
+              - 'src/**'
+              - 'main.py'
+            infrastructure:
+              - 'infrastructure/${{ env.ENV }}/**'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${TERRAFORM_VERSION}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ./${{ env.INFRA_DIR }}/${{ env.ENV }}
+
+      - name: Terraform Plan if there is any change in infrastructure
+        id: plan
+        if: github.event_name == 'pull_request' && steps.changes.outputs.infrastructure == 'true'
+        run: make tf_update_lambda ENV=${{ env.ENV }} TF_ACTION=plan COLOR=0 
+        continue-on-error: true
+
+      - name: Update Pull Request with Plan if there is any change in infrastructure
+        uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request' && steps.changes.outputs.infrastructure == 'true'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### [${{ env.INFRA_DIR }}/${{ env.ENV }}] Terraform Plan 📖 \`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+            </details>
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure' && steps.changes.outputs.infrastructure == 'true'
+        run: exit 1
+
+      - name: Terraform Apply if there is any change in infrastructure
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')  && github.event_name == 'push' && (steps.changes.outputs.infrastructure == 'true'  ||  steps.changes.outputs.api == 'true')
+        run: make tf_update_lambda ENV=${{ env.ENV }} TF_ACTION=apply COLOR=1
+
