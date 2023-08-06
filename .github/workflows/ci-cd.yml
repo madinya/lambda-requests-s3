@@ -89,7 +89,7 @@ jobs:
         if: steps.plan.outcome == 'failure' && steps.changes.outputs.infrastructure == 'true'
         run: exit 1
 
-      - name: Terraform Apply if there is any change in infrastructure
+      - name: Terraform Apply if there is any change in infrastructure or in the code 
         if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')  && github.event_name == 'push' && (steps.changes.outputs.infrastructure == 'true'  ||  steps.changes.outputs.api == 'true')
         run: make tf_update_lambda ENV=${{ env.ENV }} TF_ACTION=apply COLOR=1
 
