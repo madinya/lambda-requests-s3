@@ -36,6 +36,7 @@ clean:
 	@rm -rf $(VENV_DIR)/requirements/
 	@echo "Cleanup complete."
 
-tf_update_lambda: 
-	cd ./infrastructure/aws/${STAGE}; \
-	terraform $(TF_ACTION) $(COLOR_FLAG) -var 'tag=$(GIT_HASH)' $(AUTO_APPROVE)
+tf_update_lambda: package
+	@cd ./infrastructure/aws/${STAGE} && \
+		terraform init && \
+		terraform $(TF_ACTION) $(COLOR_FLAG) -var "tag=$(GIT_HASH)" $(AUTO_APPROVE)
