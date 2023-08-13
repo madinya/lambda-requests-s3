@@ -71,3 +71,12 @@ module "lambda_function" {
     }
   ]
 }
+
+
+module "my_api_gateway" {
+  source               = "../common/api-gateway"
+  apigateway_name      = "${local.repo}-apigw-${local.stage}"
+  lambda_function_arn  = module.lambda_function.invoke_arn
+  lambda_function_name = module.lambda_function.function_name
+  stage                = local.stage
+}
