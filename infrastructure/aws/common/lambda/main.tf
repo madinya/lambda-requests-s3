@@ -15,3 +15,10 @@ resource "aws_lambda_function" "my_lambda" {
   }
 }
 
+resource "aws_lambda_permission" "lambda_permision" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.my_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${replace(var.source_arn, var.stage, "")}*/*"
+}

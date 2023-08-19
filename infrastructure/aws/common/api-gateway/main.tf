@@ -21,13 +21,7 @@ resource "aws_api_gateway_integration" "my_lambda_integration" {
   type                    = "AWS_PROXY"
   integration_http_method = "POST"
   uri                     = var.lambda_function_arn
-}
-resource "aws_lambda_permission" "allow_execution_from_my_api_gateway" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = var.lambda_function_name
-  principal     = "apigateway.amazonaws.com"
-}
+} 
 resource "aws_api_gateway_deployment" "my_deployment" {
   rest_api_id = aws_api_gateway_rest_api.my_api_gateway.id
   stage_name  = var.stage
