@@ -40,3 +40,10 @@ variable "runtime" {
 variable "role_arn" {
   type = string
 }
+
+variable "tag" {
+  type = string
+}
+variable "stage" {
+  type = string
+}

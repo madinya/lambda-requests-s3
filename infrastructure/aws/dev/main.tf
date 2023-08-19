@@ -58,10 +58,11 @@ module "role_lambda" {
 
 module "lambda_function" {
   source        = "../common/lambda"
-  filename      = "../../../${local.repo}-${var.tag}.zip"
+  filename      = "../../../${local.repo}.zip"
   function_name = "${local.repo}-fn-${local.stage}"
   role_arn      = module.role_lambda.role_arn
-
+  tag           = var.tag
+  stage         = local.stage
   env_variables = [{
     "ENV"    = local.stage
     "BUCKET" = module.my_bucket.bucket_name
