@@ -3,7 +3,7 @@ STAGE = dev
 VENV_DIR = venv
 LIB_REQUIREMENTS = $(VENV_DIR)/requirements/
 GIT_HASH := $(shell git rev-parse --short HEAD)
-PACKAGE_NAME = ${REPO}-${GIT_HASH}.zip
+PACKAGE_NAME = ${REPO}.zip
 AUTO_APPROVE=$(if $(filter $(TF_ACTION),apply),--auto-approve,)
 COLOR_FLAG=$(if $(filter $(COLOR),0),-no-color,)
 
