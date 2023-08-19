@@ -58,6 +58,11 @@ jobs:
         run: terraform init
         working-directory: ./${{ env.INFRA_DIR }}/${{ env.ENV }}
 
+      - name: Package zip to upload
+        id: package
+        run: make package
+        continue-on-error: true
+
       - name: Terraform Plan if there is any change in infrastructure
         id: plan
         if: github.event_name == 'pull_request' && steps.changes.outputs.infrastructure == 'true'
