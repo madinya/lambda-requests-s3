@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "my_lambda" {
   filename      = var.filename
-  function_name = var.function_name
+  function_name = "${var.repo}-fn-${var.stage}"
   role          = var.role_arn
   timeout       = var.timeout
   memory_size   = var.memory_size
