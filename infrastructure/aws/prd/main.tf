@@ -60,19 +60,19 @@ module "role_lambda" {
 }
 
 module "lambda_function" {
-  source   = "../common/lambda"
-  filename = "../../../${local.repo}.zip"
-  role_arn = module.role_lambda.role_arn
-  tag      = var.tag
-  repo     = local.repo
-  stage    = local.stage
+  source     = "../common/lambda"
+  filename   = "../../../${local.repo}.zip"
+  role_arn   = module.role_lambda.role_arn
+  tag        = var.tag
+  repo       = local.repo
+  stage      = local.stage
+  source_arn = module.my_api_gateway.execution_arn
   env_variables = [{
     "ENV"    = local.stage
     "BUCKET" = module.my_bucket.bucket_name
     }
   ]
 }
-
 
 module "my_api_gateway" {
   source               = "../common/api-gateway"
