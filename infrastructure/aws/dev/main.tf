@@ -59,6 +59,7 @@ module "role_lambda" {
 module "lambda_function" {
   source     = "../common/lambda"
   filename   = "../../../${local.repo}.zip"
+  handler    = "app.lambda_function.lambda_handler"
   role_arn   = module.role_lambda.role_arn
   tag        = var.tag
   repo       = local.repo
