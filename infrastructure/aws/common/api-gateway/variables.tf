@@ -6,15 +6,20 @@ variable "lambda_function_arn" {
   type = string
 }
 
-variable "apigateway_name" {
+variable "repo" {
   type = string
 }
 
-variable "apigateway_description" {
-  type    = string
-  default = "by MAD"
+variable "stage" {
+  type = string
 }
 
-variable "stage" {
-    type = string
+variable "path_part" {
+  type    = string
+  default = "{proxy+}"
+}
+
+variable "api_key_required" {
+  type    = bool
+  default = false
 }

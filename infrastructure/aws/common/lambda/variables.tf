@@ -14,10 +14,6 @@ variable "memory_size" {
   default = 512
 }
 
-variable "function_name" {
-  type = string
-}
-
 variable "permissions" {
   description = "Add aditional permissions to the lambda function"
   default     = []
@@ -42,6 +38,9 @@ variable "role_arn" {
 }
 
 variable "tag" {
+  type = string
+}
+variable "repo" {
   type = string
 }
 variable "stage" {
