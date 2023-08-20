@@ -1,4 +1,6 @@
-venv/*
+.venv/*
+req
+.idea
 *.zip
 .terraform
 .terraform.*

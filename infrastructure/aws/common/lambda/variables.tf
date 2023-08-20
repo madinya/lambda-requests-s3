@@ -1,7 +1,12 @@
 
 variable "filename" {
   type        = string
-  description = "Name of the zip file"
+  description = "Name of the code zip file"
+}
+
+variable "filename_requirements" {
+  type        = string
+  description = "Name of the requirements zip file"
 }
 
 variable "timeout" {
@@ -37,9 +42,6 @@ variable "role_arn" {
   type = string
 }
 
-variable "tag" {
-  type = string
-}
 variable "repo" {
   type = string
 }
