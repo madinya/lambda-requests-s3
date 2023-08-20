@@ -38,7 +38,7 @@ install-poetry: venv
 	@echo "Installing Poetry in the virtual environment..."
 	@. $(VENV_DIR)/bin/activate && pip install poetry
 
-install-runtime-deps: 
+install-runtime-deps: venv
 	@echo "Installing runtime dependencies using Poetry..."
 	@$(POETRY) install --no-dev --no-interaction --no-ansi --no-root
 
@@ -50,7 +50,7 @@ install-all-deps:
 	@echo "Installing all dependencies using Poetry..."
 	@$(POETRY) install --no-interaction --no-ansi --no-root
 
-package: 
+package: install-runtime-deps
 	@echo "Creating package..."
 	@cd src/app && zip -r ${ZIP_PACKAGE_NAME} ./*
 	@mv src/app/${ZIP_PACKAGE_NAME} .
