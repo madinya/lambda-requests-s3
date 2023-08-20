@@ -68,6 +68,7 @@ clean:
 	@echo "Cleanup complete."
 
 tf_update_lambda: 
+	@echo The value of MY_VARIABLE is $(ENV)
 	@cd ./infrastructure/aws/${ENV} && \
 		terraform init && \
-		terraform $(TF_ACTION) $(COLOR_FLAG) -var "tag=$(GIT_HASH)" $(AUTO_APPROVE)
+		terraform $(TF_ACTION) $(COLOR_FLAG) $(AUTO_APPROVE)
