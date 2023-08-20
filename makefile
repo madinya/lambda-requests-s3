@@ -56,7 +56,7 @@ package: install-runtime-deps
 	@mv src/app/${ZIP_PACKAGE_NAME} .
 	@echo "Package created: $(ZIP_PACKAGE_NAME)"
 	@$(POETRY) export --without-hashes --format=requirements.txt > requirements.txt
-	@pip install -r requirements.txt -t $(PATH_REQUIREMENTS)
+	@pip install -r requirements.txt -t $(PATH_REQUIREMENTS)/python
 	@cd $(PATH_REQUIREMENTS) && zip -r ${ZIP_REQUIREMENTS_NAME} ./*
 	@mv $(PATH_REQUIREMENTS)/$(ZIP_REQUIREMENTS_NAME) .
 	@echo "Package created: $(ZIP_REQUIREMENTS_NAME)"
@@ -64,6 +64,7 @@ package: install-runtime-deps
 clean:
 	@echo "Cleaning up..."
 	@rm -f $(ZIP_REQUIREMENTS_NAME)
+	@rm -rf $(PATH_REQUIREMENTS)
 	@rm -f $(ZIP_PACKAGE_NAME)
 	@echo "Cleanup complete."
 
