@@ -73,3 +73,15 @@ tf_update_lambda:
 	@cd ./infrastructure/aws/${ENV} && \
 		terraform init && \
 		terraform $(TF_ACTION) $(COLOR_FLAG) $(AUTO_APPROVE)
+
+lint:
+	@$(POETRY)  run black src
+	@$(POETRY)  run flake8 src
+
+# Ordena las importaciones utilizando isort
+isort:
+	@$(POETRY)  run isort src
+
+# Ejecuta pruebas con pytest
+test:
+	@$(POETRY)  run pytest src
