@@ -19,7 +19,7 @@ resource "aws_lambda_function" "my_lambda" {
 
 resource "aws_lambda_layer_version" "my_layer" {
   compatible_runtimes = ["python3.9"]
-  layer_name          = "${var.repo}-requirements"
+  layer_name          = "${var.repo}-requirements-${var.stage}"
   source_code_hash    = filebase64sha256(var.filename_requirements)
   filename            = var.filename_requirements
 }
