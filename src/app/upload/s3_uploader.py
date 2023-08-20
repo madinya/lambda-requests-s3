@@ -3,6 +3,9 @@ from .uploader import Uploader
 
 class AwsUploader(Uploader):
     
+    def __init__(self) -> None:
+        super().__init__()
+
     @classmethod
     def upload(self, **kwargs):
         if not kwargs["file_content"]:
