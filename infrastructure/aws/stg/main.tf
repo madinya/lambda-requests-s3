@@ -59,11 +59,15 @@ module "role_lambda" {
 }
 
 module "lambda_function" {
-  source        = "../common/lambda"
-  filename      = "../../../${local.repo}-${var.tag}.zip"
-  function_name = "${local.repo}-fn-${local.stage}"
-  role_arn      = module.role_lambda.role_arn
+  source                = "../common/lambda"
+  filename              = "../../../${local.repo}.zip"
+  filename_requirements = "../../../${local.repo}-requirements.zip"
+  handler               = "lambda_function.lambda_handler"
+  role_arn              = module.role_lambda.role_arn
+  repo                  = local.repo
+  stage                 = local.stage
 
+  source_arn = module.my_api_gateway.execution_arn
   env_variables = [{
     "ENV"    = local.stage
     "BUCKET" = module.my_bucket.bucket_name
@@ -73,8 +77,8 @@ module "lambda_function" {
 
 module "my_api_gateway" {
   source               = "../common/api-gateway"
-  apigateway_name      = "${local.repo}-apigw-${local.stage}"
   lambda_function_arn  = module.lambda_function.invoke_arn
   lambda_function_name = module.lambda_function.function_name
   stage                = local.stage
+  repo                 = local.repo
 }
