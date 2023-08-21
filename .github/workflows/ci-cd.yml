@@ -78,16 +78,17 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prAuthor = github.actor;
-            const event = github.eventName;
+            const prAuthor = github.rest.actor;
+            const event = github.rest.eventName;
             const environment = process.env.ENV;
             const infraDir = process.env.INFRA_DIR;
+            const codeBlock = "```\n" + ${process.env.PLAN} + "\n```";            
             const planResult = `
                 Environment: ${environment}
                 Directory: ${infraDir}
 
                 Terraform Plan:
-                ${process.env.PLAN}
+                
 
                 📖 (Pushed by: @${prAuthor}, Event: ${event})
                 `;
