@@ -82,8 +82,8 @@ jobs:
             const event = github.rest.eventName;
             const environment = process.env.ENV;
             const infraDir = process.env.INFRA_DIR;
-            const planResult = process.env.PLAN
-            const codeBlock = "```\n" + planResult + "\n```";            
+            const plan = process.env.PLAN
+            const codeBlock = "```\n" + plan + "\n```";            
             const planResult = `
                 Environment: ${environment}
                 Directory: ${infraDir}
