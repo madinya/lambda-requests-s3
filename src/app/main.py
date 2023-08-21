@@ -8,6 +8,7 @@ if __name__ == "__main__":
         "bucket_folder": "gharchive-1",
         "file_name": f"test_{datetime.datetime.now()}",
         "extension": "json.gz",
+        
     }
 
     print(lambda_handler(param, None))

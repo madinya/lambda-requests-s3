@@ -70,6 +70,7 @@ module "lambda_function" {
     "ENV"    = local.stage
     "BUCKET" = module.my_bucket.bucket_name
     }
+    
   ]
 }
 
