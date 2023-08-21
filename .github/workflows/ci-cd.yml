@@ -82,13 +82,14 @@ jobs:
             const event = github.rest.eventName;
             const environment = process.env.ENV;
             const infraDir = process.env.INFRA_DIR;
-            const codeBlock = "```\n" + ${process.env.PLAN} + "\n```";            
+            const planResult = process.env.PLAN
+            const codeBlock = "```\n" + planResult + "\n```";            
             const planResult = `
                 Environment: ${environment}
                 Directory: ${infraDir}
 
                 Terraform Plan:
-                
+                ${codeBlock}
 
                 📖 (Pushed by: @${prAuthor}, Event: ${event})
                 `;
