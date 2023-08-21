@@ -5,8 +5,6 @@ GIT_HASH := $(shell git rev-parse --short HEAD)
 ZIP_PACKAGE_NAME = ${REPO}.zip
 ZIP_REQUIREMENTS_NAME = ${REPO}-requirements.zip
 PATH_REQUIREMENTS = req
-AUTO_APPROVE=$(if $(filter $(TF_ACTION),apply),--auto-approve,)
-COLOR_FLAG=$(if $(filter $(COLOR),0),-no-color,)
 
 .PHONY: package clean tf_update_lambda venv install-poetry install-runtime-deps install-dev-deps install-all-deps
 
@@ -68,20 +66,12 @@ clean:
 	@rm -f $(ZIP_PACKAGE_NAME)
 	@echo "Cleanup complete."
 
-tf_update_lambda: 
-	@echo The value of MY_VARIABLE is $(ENV)
-	@cd ./infrastructure/aws/${ENV} && \
-		terraform init && \
-		terraform $(TF_ACTION) $(COLOR_FLAG) $(AUTO_APPROVE)
-
 lint:
-	@$(POETRY)  run black src
-	@$(POETRY)  run flake8 src
+	@$(POETRY) run black src
+	@$(POETRY) run flake8 src
 
-# Ordena las importaciones utilizando isort
 isort:
-	@$(POETRY)  run isort src
+	@$(POETRY) run isort src
 
-# Ejecuta pruebas con pytest
 test:
-	@$(POETRY)  run pytest src
+	@$(POETRY) run pytest src
