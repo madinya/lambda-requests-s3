@@ -73,6 +73,8 @@ jobs:
       - name: Update Pull Request with Plan if there is any change in infrastructure
         uses: actions/github-script@v5
         if: github.event_name == 'pull_request' && steps.changes.outputs.infrastructure == 'true'
+        env:
+            PLAN: "terraform\n\n\n${{ steps.plan.outputs.stdout }}"        
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -85,7 +87,7 @@ jobs:
                 Directory: ${infraDir}
 
                 Terraform Plan:
-                ${PLAN_RESULT}
+                ${process.env.PLAN}
 
                 📖 (Pushed by: @${prAuthor}, Event: ${event})
                 `;
